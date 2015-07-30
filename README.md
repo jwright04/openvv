@@ -144,30 +144,3 @@ json
 }
 ```
 
-####Fuisz Media .swc build
-Once you have successfully installed openvv by following the directions above, you can customize your `build.xml` to allow you to save your `openvv.swc` to your `/lib/` folder of your as3vpaid project.
-
-* In your `build.xml` under the line that says: 
-
-
-`<property name="FLEX_HOME" value="${env.FLEX_HOME}"/>`
-
-add another line that says:
-
-`<property name ="FUISZ_AS3_VPAID" value="${env.FUISZ_AS3_VPAID}"/>`
-
-This is the global environment variable that points to the path of your AS3 VPAID directory.
-
-*  In the same build.xml, scroll down to the following line:
-
-`<compc output="${bin.dir}/openvv.swc"` and change it to reflect the newly created `FUISZ_AS3_VPAID` property. _Example_: 
-
-`<compc output="${FUISZ_AS3_VPAID}/openvv.swc"`
-
-* Save the build.xml file
-
-* Open your ./bash_profile on your mac (or windows/linux equivlanet) and add the following line: `export FUISZ_AS3_VPAID="[PATH TO AS3 VPAID REPO]/lib"`
-
-That's it! Next time you run `ant`, in the command line, the openvv.swc will be saved in your as3-vpaidn `/lib/` directory.
-
-
