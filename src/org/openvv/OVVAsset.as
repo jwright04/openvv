@@ -25,6 +25,7 @@ package org.openvv {
     import flash.events.EventDispatcher;
     import flash.events.TimerEvent;
     import flash.external.ExternalInterface;
+    import flash.utils.ByteArray;
     import flash.utils.Timer;
     import org.openvv.events.OVVEvent;
     import net.iab.VPAIDEvent;
@@ -191,6 +192,13 @@ package org.openvv {
 			OVVEvent.OVVImpressionUnmeasurable, OVVEvent.OVVReady]);
 
 		private var _vpaidEventsDispatcher:IEventDispatcher = null;
+
+        /**
+         * Using old method for loading the OVVAsset.js
+         */
+        [Embed(source="js/OVVAsset.js", mimeType="application/octet-stream")]
+        private var _jsOVVAsset :Class;
+
 		/**
 	     * Reference to the ad
          */
@@ -230,6 +238,10 @@ package org.openvv {
          * Optional only for backwards compatibility.
          */
         public function OVVAsset( beaconSwfUrl:String = null, id:String = null, adRef:* = null ) {
+            //old way of embedding .js
+            var b:ByteArray = new _jsOVVAsset();
+            var ovvAssetString :String = b.readUTFBytes(b.length);
+
             if (!externalInterfaceIsAvailable()) {
                 dispatchEvent(new OVVEvent(OVVEvent.OVVError, {
                     "message": "ExternalInterface unavailable"
@@ -253,7 +265,8 @@ package org.openvv {
             _renderMeter = new OVVRenderMeter(_sprite);
             _sprite.addEventListener(OVVThrottleType.THROTTLE, onThrottleEvent);
 
-            var ovvAssetSource: String = "{{OVVAssetJS}}";
+            //var ovvAssetSource: String = "{{OVVAssetJS}}";
+            var ovvAssetSource: String = ovvAssetString;
             ovvAssetSource = ovvAssetSource
                                 .replace(/OVVID/g, _id)
                                 .replace(/INTERVAL/g, POLL_INTERVAL)
